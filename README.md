@@ -8,7 +8,7 @@ Note : The parameters are based on the images I used for testing
 ## 📽️ Demo
 
 > 📹 *Check out the lane detection in action below!*  
-[![Watch Demo](readme/readme_image.PNG)](readme/readme_vid.mp4)
+[![Watch Demo](readme/readme_image.PNG)](https://drive.google.com/file/d/1vWD7798FkGMFnbIDs0_xnnO9QUf1SkcO/view?usp=sharing)
 
 ---
 
