@@ -39,9 +39,9 @@ def pipeline(img):
         if poly_param[0] is not None and poly_param[1] is not None:
             polyfit_visualization = visualize_polyfit(binary, poly_param[0], poly_param[1])
             
-            # Resize the visualization to be shown in a corner - INCREASED SIZE
+            
             viz_height, viz_width = polyfit_visualization.shape[:2]
-            display_width = int(viz_width * 0.45)  # 45% of original size (increased from 30%)
+            display_width = int(viz_width * 0.45)  
             display_height = int(viz_height * 0.45)
             resized_viz = cv2.resize(polyfit_visualization, (display_width, display_height))
             

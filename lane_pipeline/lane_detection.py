@@ -126,10 +126,10 @@ def visualize_polyfit(binary, left_fit, right_fit):
     Returns:
         visualization: RGB image with sliding windows and polyfit visualized
     """
-    # Create an RGB image to draw on
+    
     out_img = np.dstack((binary*255, binary*255, binary*255)).astype(np.uint8)
     
-    # Recreate the sliding window visualization
+    
     histogram = np.sum(binary[binary.shape[0]//2:, :], axis=0)
     midpoint = histogram.shape[0] // 2
     lft_lane = np.argmax(histogram[:midpoint])
@@ -142,36 +142,33 @@ def visualize_polyfit(binary, left_fit, right_fit):
     # Draw the sliding windows
     window_count = (binary.shape[0] // box_height) + (1 if binary.shape[0] % box_height > 0 else 0)
     
-    # Create points for polynomial visualization
+    
     plot_xleft, plot_yleft, plot_xright, plot_yright = get_poly_points(left_fit, right_fit)
     
     # For visualizing where the polynomial fit goes
     left_pts = []
     right_pts = []
     
-    # Simulate the sliding window process for visualization
+    
     for window in range(window_count):
         win_y_top = y - (window + 1) * box_height
         win_y_top = max(0, win_y_top)
         win_y_bottom = y - window * box_height
         
-        # Polynomial fit at this y level
+
         if win_y_bottom > 0:
-            # Calculate window positions at this y level using polynomial fit
+
             y_mid = (win_y_top + win_y_bottom) // 2
             left_x = left_fit[0] * y_mid**2 + left_fit[1] * y_mid + left_fit[2]
             right_x = right_fit[0] * y_mid**2 + right_fit[1] * y_mid + right_fit[2]
             
-            # Make sure points are within image bounds
+            
             left_x = max(0, min(binary.shape[1]-1, int(left_x)))
             right_x = max(0, min(binary.shape[1]-1, int(right_x)))
             
-            # Store points for later
             left_pts.append((left_x, y_mid))
             right_pts.append((right_x, y_mid))
             
-            # Draw the windows as rectangles
-            # Left lane window
             left_x_low = max(0, left_x - margin)
             left_x_high = min(binary.shape[1]-1, left_x + margin)
             cv2.rectangle(out_img, 
@@ -179,7 +176,6 @@ def visualize_polyfit(binary, left_fit, right_fit):
                          (left_x_high, win_y_bottom), 
                          (0, 255, 255), 3)  # Yellow for windows
             
-            # Right lane window
             right_x_low = max(0, right_x - margin)
             right_x_high = min(binary.shape[1]-1, right_x + margin)
             cv2.rectangle(out_img, 
@@ -187,12 +183,11 @@ def visualize_polyfit(binary, left_fit, right_fit):
                          (right_x_high, win_y_bottom), 
                          (0, 255, 255), 3)  # Yellow for windows
     
-    # Highlight the points found within windows
     for x, y in zip(plot_xleft, plot_yleft):
-        cv2.circle(out_img, (x, y), 5, (0, 0, 255), -1)  # Red for left lane points
+        cv2.circle(out_img, (x, y), 5, (0, 0, 255), -1)  
     
     for x, y in zip(plot_xright, plot_yright):
-        cv2.circle(out_img, (x, y), 5, (0, 255, 0), -1)  # Green for right lane points
+        cv2.circle(out_img, (x, y), 5, (0, 255, 0), -1)  
     
     # Draw the polynomial fit lines
     for i in range(len(plot_yleft) - 1):
@@ -206,14 +201,11 @@ def visualize_polyfit(binary, left_fit, right_fit):
     # Show polynomial equation with proper superscript format
     font = cv2.FONT_HERSHEY_SIMPLEX
     
-    # Using explicit "y^2" notation instead of Unicode superscript to avoid encoding issues
     left_eq = f"Left: {left_fit[0]:.4f}y^2+{left_fit[1]:.4f}y+{left_fit[2]:.1f}"
     right_eq = f"Right: {right_fit[0]:.4f}y^2+{right_fit[1]:.4f}y+{right_fit[2]:.1f}"
     
-    # Add background rectangle for better text visibility
     cv2.rectangle(out_img, (5, 5), (550, 95), (0, 0, 0), -1)
     
-    # Draw text with larger font and better visibility
     cv2.putText(out_img, left_eq, (10, 40), font, 1.0, (255, 255, 255), 2, cv2.LINE_AA)
     cv2.putText(out_img, right_eq, (10, 80), font, 1.0, (255, 255, 255), 2, cv2.LINE_AA)
     
