@@ -3,4 +3,4 @@ Change these things according to the situation :
 1) src and dst points (as camera placement can change)
 2) ROI vertices as well 
 3) Lane width and dashed lane length in meters
-4) Camera calibration (mtx, dist) find again if camera changes its parameters 
+4) Camera calibration (mtx, dist) find again if camera change its parameters 

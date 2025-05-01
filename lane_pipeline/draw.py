@@ -33,11 +33,10 @@ def draw(img, warped, invM, poly_param, curve_rad, offset, get_poly_points, mtx,
     else:
         text = 'Straight'
         
-    # Adding a dark background for better text visibility
+   
     text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.9, 1)[0]
     cv2.rectangle(out, (30, 35), (30 + text_size[0] + 20, 65), (0, 0, 0), -1)
     
-    # Changed font from DUPLEX to SIMPLEX, reduced size from 1.2 to 0.9, reduced thickness from 2 to 1
     cv2.putText(out, text, (40, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 1, cv2.LINE_AA)
     
     direction = ''
@@ -47,12 +46,9 @@ def draw(img, warped, invM, poly_param, curve_rad, offset, get_poly_points, mtx,
         direction = 'right' # car is to the right of the center of the lane , should move left
     text = '{:0.1f} cm {} of center'.format(abs(offset) * 100, direction)
     
-    # Adding a dark background for better text visibility
     text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.9, 1)[0]
     cv2.rectangle(out, (30, 75), (30 + text_size[0] + 20, 105), (0, 0, 0), -1)
     
-    # Changed font from DUPLEX to SIMPLEX, reduced size from 1.2 to 0.9, reduced thickness from 2 to 1
-    # Also adjusted position (y from 110 to 95)
     cv2.putText(out, text, (40, 95), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 1, cv2.LINE_AA)
     
     return out
