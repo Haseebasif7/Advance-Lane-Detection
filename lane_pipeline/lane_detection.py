@@ -110,10 +110,50 @@ def polyfit_sliding_window(binary, cache):
         if len(cache) == 0:
             return False, np.array([]), np.array([])
         avg_params = np.mean(cache, axis=0)
-        # Cache has left fit and right fit of previous lane stored 
-        # so we take mean of all left fit coefficients and right fit 
-        # cache has (left_fit , right_fit) where left_fit = (A,B,C) for left lane and right_fit has (A,B,C) for right lane
-        # and there are multiple pair of (left_fit , right_fit) depending on previous road frame
         left_fit, right_fit = avg_params[0], avg_params[1]
         ret = False
     return ret, np.array([left_fit, right_fit]), np.array([left_fit, right_fit])
+
+def visualize_polyfit(binary, left_fit, right_fit):
+    """
+    Visualize the polynomial fits on the binary image
+    
+    Args:
+        binary: Binary image
+        left_fit: Polynomial coefficients for the left lane
+        right_fit: Polynomial coefficients for the right lane
+        
+    Returns:
+        visualization: RGB image with polyfit visualized
+    """
+    # Create an RGB image to draw on
+    out_img = np.dstack((binary*255, binary*255, binary*255)).astype(np.uint8)
+    
+    # Get points for left and right lanes
+    plot_xleft, plot_yleft, plot_xright, plot_yright = get_poly_points(left_fit, right_fit)
+    
+    # Highlight the points
+    for x, y in zip(plot_xleft, plot_yleft):
+        cv2.circle(out_img, (x, y), 3, (0, 0, 255), -1)  # Red for left lane points
+    
+    for x, y in zip(plot_xright, plot_yright):
+        cv2.circle(out_img, (x, y), 3, (0, 255, 0), -1)  # Green for right lane points
+    
+    # Draw the polynomial fit lines
+    for i in range(len(plot_yleft) - 1):
+        cv2.line(out_img, (plot_xleft[i], plot_yleft[i]), 
+                 (plot_xleft[i+1], plot_yleft[i+1]), (255, 0, 0), 2)
+    
+    for i in range(len(plot_yright) - 1):
+        cv2.line(out_img, (plot_xright[i], plot_yright[i]), 
+                 (plot_xright[i+1], plot_yright[i+1]), (255, 0, 0), 2)
+    
+    # Show polynomial equation
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    left_eq = f"Left: {left_fit[0]:.4f}y²+{left_fit[1]:.4f}y+{left_fit[2]:.1f}"
+    right_eq = f"Right: {right_fit[0]:.4f}y²+{right_fit[1]:.4f}y+{right_fit[2]:.1f}"
+    
+    cv2.putText(out_img, left_eq, (10, 30), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+    cv2.putText(out_img, right_eq, (10, 60), font, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+    
+    return out_img
