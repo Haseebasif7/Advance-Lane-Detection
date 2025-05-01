@@ -7,7 +7,7 @@ This project implements an advanced lane detection system **without using any ma
 
 ## 📽️ Demo
 
-> 📹 *Check out the lane detection in action below!*  
+> 📹 *Check out the lane detection in action below! Click the Link*  
 [![Watch Demo](readme/readme_image.PNG)](https://drive.google.com/file/d/1vWD7798FkGMFnbIDs0_xnnO9QUf1SkcO/view?usp=sharing)
 
 ---
